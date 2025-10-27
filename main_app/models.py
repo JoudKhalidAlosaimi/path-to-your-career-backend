@@ -16,3 +16,14 @@ class Job(models.Model):
 
     def __str__(self):
         return f'{self.title} - {self.status}'
+    
+
+class Course(models.Model):
+    title = models.CharField()
+    provider = models.CharField()
+    description = models.CharField()
+    duration = models.DurationField()
+    link = models.URLField(blank=True)
+
+    def __str__(self):
+        return f'{self.title} - {self.provider}'
