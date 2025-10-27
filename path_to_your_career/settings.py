@@ -31,14 +31,15 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "rest_framework",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'main_app'
-]
+    "main_app",
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -75,8 +76,12 @@ WSGI_APPLICATION = 'path_to_your_career.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'path_to_your_career',  # Name of my PostgreSQL database
+        'USER': 'postgres',
+        'PASSWORD': 'JOUD2018AL2018kh!!',
+        'HOST': 'localhost',  
+        'PORT': '5432',
     }
 }
 
