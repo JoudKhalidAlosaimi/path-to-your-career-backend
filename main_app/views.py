@@ -135,3 +135,62 @@ class CoursesIndex(APIView):
             return Response(
                 {"error": str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+        
+class CourseDetail(APIView):
+
+    def get(self,request,course_id):
+        try:
+            # TODO :
+            # get a single course using the id fron the DB
+            # Convert the DB object to JSON
+            # return a response with a status
+            queryset = get_object_or_404(Course, id=course_id)
+
+            serializer = CourseSerializer(queryset)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as error:
+            return Response(
+                {"error": str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+    
+    def put(self,request,course_id):
+        try:
+            # TODO :
+            # get a single course using the id fron the DB
+            # Overwrite the single course
+            # save it if its valid
+            # return a response and status
+            queryset = get_object_or_404(Course, id=course_id)
+
+            serializer = CourseSerializer(queryset, data=request.data)
+            
+            if serializer.is_valid():
+                serializer.save()  
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        except Exception as error:
+            return Response(
+                {"error": str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+    
+    def delete(self,request,course_id):
+        try:
+            # TODO :
+            # Get the single course from the db using the id
+            # Delete the course
+            # return a response and a status
+            queryset = get_object_or_404(Course, id=course_id)
+
+            queryset.delete()
+
+            return Response(
+                {"message": f"The course {course_id} has been successfully deleted."},
+                status=status.HTTP_204_NO_CONTENT
+            )
+
+        except Exception as error:
+            return Response(
+                {"error": str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
