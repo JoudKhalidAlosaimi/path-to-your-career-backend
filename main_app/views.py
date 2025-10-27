@@ -230,3 +230,62 @@ class BootcampsIndex(APIView):
             return Response(
                 {"error": str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+        
+class BootcampDetail(APIView):
+
+    def get(self,request,bootcamp_id):
+        try:
+            # TODO :
+            # get a single bootcamp using the id fron the DB
+            # Convert the DB object to JSON
+            # return a response with a status
+            queryset = get_object_or_404(Bootcamp, id=bootcamp_id)
+
+            serializer = BootcampSerializer(queryset)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as error:
+            return Response(
+                {"error": str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+    
+    def put(self,request,bootcamp_id):
+        try:
+            # TODO :
+            # get a single bootcamp using the id fron the DB
+            # Overwrite the single bootcamp
+            # save it if its valid or return a 400 BAD REQUEST
+            # return a response and status
+            queryset = get_object_or_404(Bootcamp, id=bootcamp_id)
+
+            serializer = BootcampSerializer(queryset, data=request.data)
+            
+            if serializer.is_valid():
+                serializer.save()  
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        except Exception as error:
+            return Response(
+                {"error": str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+    
+    def delete(self,request,bootcamp_id):
+        try:
+            # TODO :
+            # Get the single bootcamp from the db using the id
+            # Delete the bootcamp
+            # return a response and a status
+            queryset = get_object_or_404(Bootcamp, id=bootcamp_id)
+
+            queryset.delete()
+
+            return Response(
+                {"message": f"The bootcamp {bootcamp_id} has been successfully deleted."},
+                status=status.HTTP_204_NO_CONTENT
+            )
+
+        except Exception as error:
+            return Response(
+                {"error": str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
