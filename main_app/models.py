@@ -38,3 +38,19 @@ class Bootcamp(models.Model):
 
     def __str__(self):
         return f'{self.title} - {self.provider}'
+
+
+APPLICATION_STATUS = (
+    ('Applied', 'Applied'),
+    ('Interview', 'Interview'),
+    ('Rejected', 'Rejected')
+)
+class Application(models.Model):
+    job = models.ForeignKey(Job, on_delete=models.CASCADE,null=True,blank=True)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE,null=True,blank=True)
+    bootcamp = models.ForeignKey(Bootcamp, on_delete=models.CASCADE,null=True,blank=True)
+    status = models.CharField(choices=APPLICATION_STATUS, default=APPLICATION_STATUS[0][0])
+    bookmarked = models.BooleanField()
+
+    def __str__(self):
+        return f'{self.job} - {self.course} - {self.bootcamp} - {self.status}'
