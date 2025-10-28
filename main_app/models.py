@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 # Create your models here.
 
@@ -61,3 +63,19 @@ class Application(models.Model):
             return f'{self.bootcamp.title} - {self.status}'
         else:
             return 'No applications made yet'
+
+GENDER = (
+    ('Male', 'Male'),
+    ('Female', 'Female')
+)
+class UserProfile(models.Model):
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    phonenumber = models.CharField(max_length=15,null=True,blank=True)
+    gender = models.CharField(choices=GENDER,null=True,blank=True)
+    # https://learndjango.com/tutorials/django-file-and-image-uploads-tutorial
+    profile_image = models.ImageField(upload_to='profile_images/',null=True,blank=True)
+
+    def __str__(self):
+        return f'{self.user.first_name} {self.user.last_name}'
+
+
