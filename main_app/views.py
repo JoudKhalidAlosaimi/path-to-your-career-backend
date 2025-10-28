@@ -4,8 +4,8 @@ from rest_framework import status
 
 from django.shortcuts import get_object_or_404
 
-from .models import Job,Course,Bootcamp
-from .serializers import JobSerializer,CourseSerializer,BootcampSerializer
+from .models import Job,Course,Bootcamp,Application
+from .serializers import JobSerializer,CourseSerializer,BootcampSerializer,ApplicationSerializer
 
 # Create your views here.
 
@@ -284,6 +284,40 @@ class BootcampDetail(APIView):
                 {"message": f"The bootcamp {bootcamp_id} has been successfully deleted."},
                 status=status.HTTP_204_NO_CONTENT
             )
+
+        except Exception as error:
+            return Response(
+                {"error": str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        
+class ApplicationIndex(APIView):
+    def get(self, request):
+        try:
+            # TODO :
+            # get all the applications from the DB
+            # convert them to JSON
+            queryset = Application.objects.all()
+
+            serializer = ApplicationSerializer(queryset, many=True)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as error:
+            return Response(
+                {"error": str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+    
+    def post(self, request):
+        try:
+            # TODO :
+            # take the data from the request and put it in a serializer
+            # if the data is valid, save it and return a 201 CREATED 
+            # if it's not valid return 400 BAD REQUEST
+            serializer = ApplicationSerializer(data=request.data)
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as error:
             return Response(

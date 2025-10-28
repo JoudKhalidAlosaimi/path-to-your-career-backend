@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Job,Course,Bootcamp
+from .models import Job,Course,Bootcamp,Application
 
 class JobSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,4 +14,9 @@ class CourseSerializer(serializers.ModelSerializer):
 class BootcampSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bootcamp
+        fields = "__all__"
+
+class ApplicationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Application
         fields = "__all__"
