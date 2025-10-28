@@ -361,3 +361,23 @@ class ApplicationDetail(APIView):
             return Response(
                 {"error": str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+    
+    def delete(self,request,application_id):
+        try:
+            # TODO :
+            # get the single application from the DB
+            # Delete it
+
+            queryset = get_object_or_404(Application,id=application_id)
+
+            queryset.delete()
+
+            return Response(
+                    {"message": f"The application {application_id} has been successfully deleted."},
+                    status=status.HTTP_204_NO_CONTENT
+                )
+
+        except Exception as error:
+            return Response(
+                {"error": str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
