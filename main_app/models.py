@@ -50,7 +50,14 @@ class Application(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE,null=True,blank=True)
     bootcamp = models.ForeignKey(Bootcamp, on_delete=models.CASCADE,null=True,blank=True)
     status = models.CharField(choices=APPLICATION_STATUS, default=APPLICATION_STATUS[0][0])
-    bookmarked = models.BooleanField()
+    bookmarked = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.job} - {self.course} - {self.bootcamp} - {self.status}'
+        if self.job != None:
+            return f'{self.job.title} - {self.status}'
+        elif self.course != None:
+            return f'{self.course.title} - {self.status}'
+        elif self.bootcamp != None:
+            return f'{self.bootcamp.title} - {self.status}'
+        else:
+            return 'No applications made yet'
