@@ -49,8 +49,8 @@ class JobDetail(APIView):
     def get(self,request,job_id):
         try:
             # TODO :
-            # get a single job using the id fron the DB
-            # Convert the DB object to JSON
+            # get a single job from the DB using the id=job_id
+            # Convert the DB object to JSON using a serializer
             queryset = get_object_or_404(Job, id=job_id)
 
             serializer = JobSerializer(queryset)
@@ -64,7 +64,7 @@ class JobDetail(APIView):
     def put(self,request,job_id):
         try:
             # TODO :
-            # get a single job using the id fron the DB
+            # get a single job from the DB using the id=job_id
             # Overwrite the single job with the new data using request.data
             # save it if its valid
             queryset = get_object_or_404(Job, id=job_id)
@@ -84,7 +84,7 @@ class JobDetail(APIView):
     def delete(self,request,job_id):
         try:
             # TODO :
-            # Get the single job from the db using the id
+            # get a single job from the DB using the id=job_id
             # Delete the job
             queryset = get_object_or_404(Job, id=job_id)
 
@@ -141,8 +141,8 @@ class CourseDetail(APIView):
     def get(self,request,course_id):
         try:
             # TODO :
-            # get a single course using the id fron the DB
-            # Convert the DB object to JSON
+            # get a single course from the DB
+            # Convert the course to JSON
             # return a response with a status
             queryset = get_object_or_404(Course, id=course_id)
 
@@ -157,7 +157,7 @@ class CourseDetail(APIView):
     def put(self,request,course_id):
         try:
             # TODO :
-            # get a single course using the id fron the DB
+            # get a single course from the DB
             # Overwrite the single course
             # save it if its valid
             # return a response and status
@@ -178,7 +178,7 @@ class CourseDetail(APIView):
     def delete(self,request,course_id):
         try:
             # TODO :
-            # Get the single course from the db using the id
+            # Get the single course from the DB 
             # Delete the course
             # return a response and a status
             queryset = get_object_or_404(Course, id=course_id)
@@ -236,8 +236,8 @@ class BootcampDetail(APIView):
     def get(self,request,bootcamp_id):
         try:
             # TODO :
-            # get a single bootcamp using the id fron the DB
-            # Convert the DB object to JSON
+            # get a single bootcamp from the DB
+            # Convert the single bootcamp to JSON
             # return a response with a status
             queryset = get_object_or_404(Bootcamp, id=bootcamp_id)
 
@@ -252,7 +252,7 @@ class BootcampDetail(APIView):
     def put(self,request,bootcamp_id):
         try:
             # TODO :
-            # get a single bootcamp using the id fron the DB
+            # get a single bootcamp from the DB
             # Overwrite the single bootcamp
             # save it if its valid or return a 400 BAD REQUEST
             # return a response and status
@@ -273,7 +273,7 @@ class BootcampDetail(APIView):
     def delete(self,request,bootcamp_id):
         try:
             # TODO :
-            # Get the single bootcamp from the db using the id
+            # Get the single bootcamp from the DB
             # Delete the bootcamp
             # return a response and a status
             queryset = get_object_or_404(Bootcamp, id=bootcamp_id)
@@ -319,6 +319,24 @@ class ApplicationIndex(APIView):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+        except Exception as error:
+            return Response(
+                {"error": str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+class ApplicationDetail(APIView):
+
+    def get(self,request,application_id):
+        try:
+            # TODO :
+            # get a single application using the id from the DB
+            # Convert the single application to JSON using serializer
+
+            queryset = get_object_or_404(Application, id=application_id)
+
+            serializer = ApplicationSerializer(queryset)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as error:
             return Response(
                 {"error": str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
