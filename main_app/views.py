@@ -1,16 +1,21 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticatedOrReadOnly,AllowAny
 
 from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
 
 from .models import Job,Course,Bootcamp,Application
 from .serializers import JobSerializer,CourseSerializer,BootcampSerializer,ApplicationSerializer
 
+
 # Create your views here.
 
+User = get_user_model()
+
 class JobsIndex(APIView):
-    
+    permission_classes = [AllowAny]
     def get(self, request):
         try:
             # TODO :
@@ -45,7 +50,7 @@ class JobsIndex(APIView):
             )
         
 class JobDetail(APIView):
-
+    permission_classes = [AllowAny]
     def get(self,request,job_id):
         try:
             # TODO :
@@ -101,6 +106,7 @@ class JobDetail(APIView):
             )
         
 class CoursesIndex(APIView):
+    permission_classes = [AllowAny]
     def get(self,request):
         try:
             # TODO :
@@ -137,7 +143,7 @@ class CoursesIndex(APIView):
             )
         
 class CourseDetail(APIView):
-
+    permission_classes = [AllowAny]
     def get(self,request,course_id):
         try:
             # TODO :
@@ -196,6 +202,7 @@ class CourseDetail(APIView):
             )
         
 class BootcampsIndex(APIView):
+    permission_classes = [AllowAny]
     def get(self,request):
         try:
             # TODO :
@@ -232,7 +239,7 @@ class BootcampsIndex(APIView):
             )
         
 class BootcampDetail(APIView):
-
+    permission_classes = [AllowAny]
     def get(self,request,bootcamp_id):
         try:
             # TODO :
@@ -291,6 +298,7 @@ class BootcampDetail(APIView):
             )
         
 class ApplicationIndex(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     def get(self, request):
         try:
             # TODO :
@@ -325,7 +333,7 @@ class ApplicationIndex(APIView):
             )
 
 class ApplicationDetail(APIView):
-
+    permission_classes = [IsAuthenticatedOrReadOnly]
     def get(self,request,application_id):
         try:
             # TODO :
@@ -381,3 +389,49 @@ class ApplicationDetail(APIView):
             return Response(
                 {"error": str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+class RegisterUser(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self,request):
+        first_name = request.data.get('first_name')
+        last_name = request.data.get('last_name')
+        username = request.data.get('username')
+        email = request.data.get('email')
+        password = request.data.get('password')
+
+        if not username or not password:
+            return Response(
+                {'error': 'Please enter a username and password'}, 
+                status=status.HTTP_400_BAD_REQUEST
+                )
+        
+        if User.objects.filter(username=username).exists():
+            return Response(
+                {'error': 'The username already exists.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        if User.objects.filter(email=email).exists():
+            return Response(
+                {'error': 'The email already exists.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        user = User.objects.create_user(
+            first_name = first_name,
+            last_name = last_name,
+            username = username,
+            email = email,
+            password = password
+        )
+
+        return Response(
+            {
+            'id': user.id,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'username': user.username,
+            'email': user.email
+        },
+            status=status.HTTP_201_CREATED)
