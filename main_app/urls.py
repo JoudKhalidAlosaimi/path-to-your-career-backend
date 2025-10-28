@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import JobsIndex,JobDetail,CoursesIndex,CourseDetail,BootcampsIndex,BootcampDetail,ApplicationIndex,ApplicationDetail
+from rest_framework_simplejwt.views import TokenObtainPairView,TokenRefreshView
 
 urlpatterns = [
     path('jobs/', JobsIndex.as_view(), name='job_index'),
@@ -9,5 +10,7 @@ urlpatterns = [
     path('bootcamps/', BootcampsIndex.as_view(), name='bootcamp_index'),
     path('bootcamps/<int:bootcamp_id>/', BootcampDetail.as_view(), name='bootcamp_detail'),
     path('applications/', ApplicationIndex.as_view(), name='application_index'),
-    path('applications/<int:application_id>/', ApplicationDetail.as_view(), name='application_detail')
+    path('applications/<int:application_id>/', ApplicationDetail.as_view(), name='application_detail'),
+    path('login/', TokenObtainPairView.as_view(), name='user_login'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh')
 ]
