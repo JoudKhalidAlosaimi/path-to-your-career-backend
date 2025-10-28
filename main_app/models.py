@@ -70,7 +70,7 @@ GENDER = (
 )
 class UserProfile(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
-    phonenumber = models.CharField(max_length=15,null=True,blank=True)
+    phone_number = models.CharField(max_length=15,null=True,blank=True)
     gender = models.CharField(choices=GENDER,null=True,blank=True)
     # https://learndjango.com/tutorials/django-file-and-image-uploads-tutorial
     profile_image = models.ImageField(upload_to='profile_images/',null=True,blank=True)
