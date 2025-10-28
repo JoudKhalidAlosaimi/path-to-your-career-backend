@@ -24,4 +24,4 @@ class ApplicationSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ['phone_number', 'gender', 'profile_image']
+        fields = "__all__"

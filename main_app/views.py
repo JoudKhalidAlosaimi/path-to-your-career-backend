@@ -1,13 +1,13 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticatedOrReadOnly,AllowAny
+from rest_framework.permissions import IsAuthenticatedOrReadOnly,AllowAny,IsAuthenticated
 
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 
-from .models import Job,Course,Bootcamp,Application
-from .serializers import JobSerializer,CourseSerializer,BootcampSerializer,ApplicationSerializer
+from .models import Job,Course,Bootcamp,Application,UserProfile
+from .serializers import JobSerializer,CourseSerializer,BootcampSerializer,ApplicationSerializer,UserProfileSerializer
 
 
 # Create your views here.
@@ -426,6 +426,8 @@ class RegisterUser(APIView):
             password = password
         )
 
+        UserProfile.objects.create(user=user)
+
         return Response(
             {
             'id': user.id,
@@ -435,3 +437,20 @@ class RegisterUser(APIView):
             'email': user.email
         },
             status=status.HTTP_201_CREATED)
+    
+class UserProfileDetail(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self,request,user_id):
+        # TODO 
+        # Get a single profile 
+        # convert it to JSON
+        try:
+            queryset = get_object_or_404(UserProfile, user=user_id)
+
+            serializer = UserProfileSerializer(queryset)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as error:
+            return Response(
+                {"error": str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
