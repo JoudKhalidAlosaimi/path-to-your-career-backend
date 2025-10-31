@@ -426,8 +426,6 @@ class RegisterUser(APIView):
             password = password
         )
 
-        UserProfile.objects.create(user=user)
-
         return Response(
             {
             'id': user.id,
@@ -440,29 +438,18 @@ class RegisterUser(APIView):
     
 class UserProfileDetail(APIView):
     permission_classes = [IsAuthenticated]
-    def get(self,request,user_id):
-        # TODO 
-        # Get a single profile based on the user's id
-        # convert it to JSON
+    def get(self,request):
         try:
-            queryset = get_object_or_404(UserProfile, user=user_id)
-
-            serializer = UserProfileSerializer(queryset)
+            serializer = UserProfileSerializer(request.user.profile)
 
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as error:
             return Response(
                 {"error": str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-    def put(self,request,user_id):
+    def put(self,request):
         try:
-            # TODO :
-            # Get a single profile based on the user's id
-            # Overwrite the profile fields
-            # save it
-            queryset = get_object_or_404(UserProfile, id=user_id)
-
-            serializer = UserProfileSerializer(queryset, data=request.data)
+            serializer = UserProfileSerializer(request.user.profile, data=request.data, partial = True)
             
             if serializer.is_valid():
                 serializer.save()  

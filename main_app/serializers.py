@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import Job,Course,Bootcamp,Application,UserProfile
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 class JobSerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,7 +23,13 @@ class ApplicationSerializer(serializers.ModelSerializer):
         model = Application
         fields = "__all__"
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'first_name', 'last_name']
+
 class UserProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only = True)
     class Meta:
         model = UserProfile
-        fields = ['phone_number' , 'gender', 'profile_image']
+        fields = "__all__"
