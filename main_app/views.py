@@ -304,7 +304,7 @@ class ApplicationIndex(APIView):
             # TODO :
             # get all the applications from the DB
             # convert them to JSON
-            queryset = Application.objects.all()
+            queryset = Application.objects.filter(owner=request.user)
 
             serializer = ApplicationSerializer(queryset, many=True)
 
