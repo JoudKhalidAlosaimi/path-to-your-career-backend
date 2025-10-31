@@ -53,6 +53,7 @@ class Application(models.Model):
     bootcamp = models.ForeignKey(Bootcamp, on_delete=models.CASCADE,null=True,blank=True)
     status = models.CharField(choices=APPLICATION_STATUS, default=APPLICATION_STATUS[0][0])
     bookmarked = models.BooleanField(default=False)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         if self.job != None:
