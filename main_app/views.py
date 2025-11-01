@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 
 from .models import Job,Course,Bootcamp,Application,UserProfile
-from .serializers import JobSerializer,CourseSerializer,BootcampSerializer,ApplicationSerializer,UserProfileSerializer
+from .serializers import JobSerializer,CourseSerializer,BootcampSerializer,ApplicationSerializer,UserProfileSerializer,UserSerializer
 
 
 # Create your views here.
@@ -426,6 +426,8 @@ class RegisterUser(APIView):
             password = password
         )
 
+        UserProfile.objects.create(user=user)
+
         return Response(
             {
             'id': user.id,
@@ -450,9 +452,9 @@ class UserProfileDetail(APIView):
     def put(self,request):
         try:
             serializer = UserProfileSerializer(request.user.profile, data=request.data, partial = True)
-            
+
             if serializer.is_valid():
-                serializer.save()  
+                serializer.save() 
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

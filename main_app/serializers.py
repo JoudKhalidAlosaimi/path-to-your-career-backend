@@ -29,7 +29,24 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email', 'first_name', 'last_name']
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only = True)
+    # Credits go to https://medium.com/@altafkhan_24475/part-12-a-quick-guide-to-modelserializer-django-rest-framework-7a9753b6efd9
+    first_name = serializers.CharField(required=False)
+    last_name = serializers.CharField(required=False)
+    email = serializers.EmailField(required=False)
+
     class Meta:
-        model = UserProfile
-        fields = "__all__"
+        model = UserProfile 
+        fields = '__all__'   
+
+    def update(self, instance, validated_data):
+        user = instance.user
+        user.first_name = validated_data.get('first_name', user.first_name)
+        user.last_name = validated_data.get('last_name', user.last_name)
+        user.email = validated_data.get('email', user.email)
+        user.save()
+
+        instance.phone_number = validated_data.get('phone_number', instance.phone_number)
+        instance.gender = validated_data.get('gender', instance.gender)
+        instance.save()
+
+        return instance
