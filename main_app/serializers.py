@@ -21,7 +21,7 @@ class BootcampSerializer(serializers.ModelSerializer):
 class ApplicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Application
-        fields = "__all__"
+        fields = '__all__'
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
