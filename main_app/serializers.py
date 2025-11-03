@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Job,Course,Bootcamp,Application,UserProfile
+from .models import Job,Course,Bootcamp,Application,UserProfile,Bookmark
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -19,13 +19,19 @@ class BootcampSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class ApplicationSerializer(serializers.ModelSerializer):
-    
+
     job_title = serializers.CharField(source='job.title', read_only=True)
     course_title = serializers.CharField(source='course.title', read_only=True)
     bootcamp_title = serializers.CharField(source='bootcamp.title', read_only=True)
 
     class Meta:
         model = Application
+        fields = '__all__'
+
+class BookmarkSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Bookmark
         fields = '__all__'
 
 class UserSerializer(serializers.ModelSerializer):

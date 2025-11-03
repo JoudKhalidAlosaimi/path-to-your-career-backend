@@ -6,8 +6,8 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly,AllowAny,IsAuth
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 
-from .models import Job,Course,Bootcamp,Application,UserProfile
-from .serializers import JobSerializer,CourseSerializer,BootcampSerializer,ApplicationSerializer,UserProfileSerializer,UserSerializer
+from .models import Job,Course,Bootcamp,Application,UserProfile,Bookmark
+from .serializers import JobSerializer,CourseSerializer,BootcampSerializer,ApplicationSerializer,UserProfileSerializer,UserSerializer,BookmarkSerializer
 
 
 # Create your views here.
@@ -398,6 +398,99 @@ class ApplicationDetail(APIView):
 
             return Response(
                     {"message": f"The application {application_id} has been successfully deleted."},
+                    status=status.HTTP_204_NO_CONTENT
+                )
+
+        except Exception as error:
+            return Response(
+                {"error": str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        
+class BookmarkIndex(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    def get(self, request):
+        try:
+            # TODO :
+            # get all the bookmarks from the DB
+            # convert them to JSON
+            queryset = Bookmark.objects.filter(owner=request.user)
+
+            serializer = BookmarkSerializer(queryset, many=True)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as error:
+            return Response(
+                {"error": str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+    
+    def post(self, request):
+        try:
+            # TODO :
+            # take the data from the request and put it in a serializer
+            # if the data is valid, save it and return a 201 CREATED 
+            # if it's not valid return 400 BAD REQUEST
+            serializer = BookmarkSerializer(data=request.data)
+
+            if serializer.is_valid():
+                serializer.save(owner=request.user)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        except Exception as error:
+            return Response(
+                {"error": str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+class BookmarkDetail(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    def get(self,request,bookmark_id):
+        try:
+            # TODO :
+            # get a single bookmark using the id from the DB
+            # Convert the single bookmark to JSON using serializer
+
+            queryset = get_object_or_404(Bookmark, id=bookmark_id)
+
+            serializer = BookmarkSerializer(queryset)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as error:
+            return Response(
+                {"error": str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+    
+    def put(self,request,bookmark_id):
+        try:
+            # TODO :
+            # get a single bookmark
+            # Overwrite the bookmark
+            # save it
+            queryset = get_object_or_404(Bookmark, id=bookmark_id)
+
+            serializer = BookmarkSerializer(queryset, data=request.data)
+            
+            if serializer.is_valid():
+                serializer.save(owner=request.user)  
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        except Exception as error:
+            return Response(
+                {"error": str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+    
+    def delete(self,request,bookmark_id):
+        try:
+            # TODO :
+            # get the single bookmark from the DB
+            # Delete it
+
+            queryset = get_object_or_404(Bookmark,id=bookmark_id)
+
+            queryset.delete()
+
+            return Response(
+                    {"message": f"The bookmark {bookmark_id} has been successfully removed."},
                     status=status.HTTP_204_NO_CONTENT
                 )
 

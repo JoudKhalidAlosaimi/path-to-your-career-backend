@@ -51,8 +51,7 @@ class Application(models.Model):
     job = models.ForeignKey(Job, on_delete=models.CASCADE,null=True,blank=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE,null=True,blank=True)
     bootcamp = models.ForeignKey(Bootcamp, on_delete=models.CASCADE,null=True,blank=True)
-    status = models.CharField(choices=APPLICATION_STATUS, default=APPLICATION_STATUS[0][0])
-    bookmarked = models.BooleanField(default=False)
+    status = models.CharField(choices=APPLICATION_STATUS, default=APPLICATION_STATUS[0][0],null=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -64,6 +63,23 @@ class Application(models.Model):
             return f'{self.bootcamp.title} - {self.status}'
         else:
             return 'No applications made yet'
+
+class Bookmark(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    job = models.ForeignKey(Job, on_delete=models.CASCADE,null=True,blank=True)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE,null=True,blank=True)
+    bootcamp = models.ForeignKey(Bootcamp, on_delete=models.CASCADE,null=True,blank=True)
+    is_bookmarked = models.BooleanField(default=True)
+
+    def __str__(self):
+        if self.job != None:
+            return f'{self.job.title} - {self.is_bookmarked}'
+        elif self.course != None:
+            return f'{self.course.title} - {self.is_bookmarked}'
+        elif self.bootcamp != None:
+            return f'{self.bootcamp.title} - {self.is_bookmarked}'
+        else:
+            return 'No bookmarks made yet'
 
 GENDER = (
     ('Male', 'Male'),
