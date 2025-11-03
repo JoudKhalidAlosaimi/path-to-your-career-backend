@@ -323,6 +323,22 @@ class ApplicationIndex(APIView):
             serializer = ApplicationSerializer(data=request.data)
 
             if serializer.is_valid():
+                job = request.data.get('job')
+                course = request.data.get('course')
+                bootcamp = request.data.get('bootcamp')
+
+                application_exits = Application.objects.filter(
+                    owner=request.user,
+                    job=job,
+                    course=course,
+                    bootcamp=bootcamp,
+                ).exists()
+
+                if application_exits:
+                    return Response(
+                        {"error": "You have already applied for this."},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
