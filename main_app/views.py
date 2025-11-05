@@ -571,3 +571,30 @@ class UserProfileDetail(APIView):
             return Response(
                 {"error": str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+        
+class UserProfileDelete(APIView):
+    permission_classes = [IsAuthenticated]
+    def delete(self, request, user_id):
+        try:
+            user = get_object_or_404(User, id=user_id)
+
+            if user != request.user:
+                return Response(
+                    {"error": "You cannot delete this account."},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            
+            UserProfile.objects.filter(user=user).delete()
+            
+            user.delete()
+
+            return Response(
+                {"message": f"The account {user_id} has been successfully deleted."},
+                status=status.HTTP_204_NO_CONTENT
+            )
+
+        except Exception as error:
+            return Response(
+                {"error": str(error)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

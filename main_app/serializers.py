@@ -30,6 +30,13 @@ class ApplicationSerializer(serializers.ModelSerializer):
 
 class BookmarkSerializer(serializers.ModelSerializer):
 
+    job_title = serializers.CharField(source='job.title', read_only=True)
+    job_description = serializers.CharField(source='job.description',read_only=True)
+    course_title = serializers.CharField(source='course.title', read_only=True)
+    course_description = serializers.CharField(source='course.description',read_only=True)
+    bootcamp_title = serializers.CharField(source='bootcamp.title', read_only=True)
+    course_description = serializers.CharField(source='course.description',read_only=True)
+
     class Meta:
         model = Bookmark
         fields = '__all__'
@@ -40,24 +47,26 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email', 'first_name', 'last_name']
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    # Credits go to https://medium.com/@altafkhan_24475/part-12-a-quick-guide-to-modelserializer-django-rest-framework-7a9753b6efd9
-    first_name = serializers.CharField(required=False)
-    last_name = serializers.CharField(required=False)
-    email = serializers.EmailField(required=False)
+    # https://medium.com/%40titoadeoye/django-backend-foundations-extending-with-django-rest-framework-b28aad6eef53
+    # https://youtu.be/Q9iYzhaUZEI?si=XZjdShTj9OQhNdy0
+    first_name = serializers.CharField(source='user.first_name',required=False)
+    last_name = serializers.CharField(source='user.last_name',required=False)
+    email = serializers.EmailField(source='user.email',required=False)
 
     class Meta:
         model = UserProfile 
         fields = '__all__'   
 
     def update(self, instance, validated_data):
-        user = instance.user
-        user.first_name = validated_data.get('first_name', user.first_name)
-        user.last_name = validated_data.get('last_name', user.last_name)
-        user.email = validated_data.get('email', user.email)
-        user.save()
+            user_data = validated_data.pop('user', {}) 
+            user = instance.user
 
-        instance.phone_number = validated_data.get('phone_number', instance.phone_number)
-        instance.gender = validated_data.get('gender', instance.gender)
-        instance.save()
+            for attr, value in user_data.items():
+                setattr(user, attr, value)
+            user.save()
 
-        return instance
+            for attr, value in validated_data.items():
+                setattr(instance, attr, value)
+            instance.save()
+
+            return instance

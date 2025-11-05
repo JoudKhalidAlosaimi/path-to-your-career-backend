@@ -70,6 +70,7 @@ class Bookmark(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE,null=True,blank=True)
     bootcamp = models.ForeignKey(Bootcamp, on_delete=models.CASCADE,null=True,blank=True)
     is_bookmarked = models.BooleanField(default=True)
+    is_favorite = models.BooleanField(default=False)
 
     def __str__(self):
         if self.job != None:
