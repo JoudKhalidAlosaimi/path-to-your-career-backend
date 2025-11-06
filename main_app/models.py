@@ -34,8 +34,7 @@ class Bootcamp(models.Model):
     title = models.CharField()
     provider = models.CharField()
     description = models.CharField()
-    start_date = models.DateField()
-    end_date = models.DateField()
+    status = models.CharField(choices=STATUS,default=STATUS[0][0])
     link = models.URLField(blank=True)
 
     def __str__(self):
@@ -90,8 +89,6 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE, related_name='profile')
     phone_number = models.CharField(max_length=15,null=True,blank=True)
     gender = models.CharField(choices=GENDER,null=True,blank=True)
-    # https://learndjango.com/tutorials/django-file-and-image-uploads-tutorial
-    profile_image = models.ImageField(upload_to='profile_images/',null=True,blank=True)
 
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}'
