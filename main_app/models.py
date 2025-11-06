@@ -44,7 +44,9 @@ class Bootcamp(models.Model):
 APPLICATION_STATUS = (
     ('Applied', 'Applied'),
     ('Interview', 'Interview'),
-    ('Rejected', 'Rejected')
+    ('Rejected', 'Rejected'),
+    ('Completed', 'Completed'),
+    ('Ongoing','Ongoing')
 )
 class Application(models.Model):
     job = models.ForeignKey(Job, on_delete=models.CASCADE,null=True,blank=True)

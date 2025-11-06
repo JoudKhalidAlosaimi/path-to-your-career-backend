@@ -40,8 +40,6 @@ To clone the project up and running on your local machine, follow these instruct
 
 # Routing Table 
 
-### User Model
-
 | Method | URL pattern               | Action                         |
 | -------|:-------------------------:| ------------------------------:|
 | POST   | /api/register/            | Register a new user            |
@@ -49,46 +47,26 @@ To clone the project up and running on your local machine, follow these instruct
 | GET    | /api/profile/             | Get a user's profile details   |
 | PUT    | /api/profile/             |  Update a user's profile info  |   
 | Delete | /api/profile/:id/         | Delete a user's account        |
-
-### Job Model
-| Method | URL pattern               | Action                         |
-| -------|:-------------------------:| ------------------------------:|
 | GET    | /api/jobs                 | Get all the jobs               |
 | POST   | /api/jobs/                | Create a new job               |
 | GET    | /api/jobs/:id/            |  Get a single job              |
 | PUT    | /api/jobs/:id/            | Edit an existing job           |
 | DELETE | /api/jobs/:id/            |  Delete an existing job        |
-
-### Course Model
-| Method | URL pattern               | Action                         |
-| -------|:-------------------------:| ------------------------------:|
 | GET    | /api/courses/             |  Get all the courses           |
 | POST   | /api/courses/             |  Create a new course           |
 | GET    | /api/courses/:id/         |  Get a single course           |
 | PUT    | /api/courses/:id/         | Edit an existing course        |
 | DELETE | /api/courses/:id/         |  Delete an existing course     |
-
-### Bootcamp Model
-| Method | URL pattern               | Action                         |
-| -------|:-------------------------:| ------------------------------:|
 | GET    | /api/bootcamps            | Get all the bootcamps          |
 | POST   | /api/bootcamps/           |  Create a new bootcamp         |
 | GET    | /api/bootcamps/:id/       | Get a single bootcamp          |
 | PUT    | /api/bootcamps/:id/       | Edit an existing bootcamp      |
 | DELETE | /api/bootcamps/:id/       |  Delete an existing bootcamp   |
-
-### Application model
-| Method | URL pattern               | Action                         |
-| -------|:-------------------------:| ------------------------------:|
 | GET    | /api/applications/        | Get all the applications       |
 | POST   | /api/applications/        |  Create a new application      |
 | GET    | /api/applications/:id/    |  Get a single application      |
 | PUT    | /api/applications/:id/    |Edit an existing application    |
 | DELETE | /api/applications/:id/    | Delete an existing application |
-
-### Bookmark model
-| Method | URL pattern               | Action                         |
-| -------|:-------------------------:| ------------------------------:|
 | GET    | /api/bookmarks/           | Get all the bookmarks          |
 | POST   | /api/bookmarks/           |  Create a new bookmark         |
 | GET    | /api/bookmarks/:id/       |  Get a single bookmark         |
