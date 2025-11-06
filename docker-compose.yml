@@ -1,0 +1,47 @@
+services:
+  pathtoyourcareer:
+    image: postgres
+    container_name: pathtoyourcareer
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    environment:
+      POSTGRES_USER: path_admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: pathtoyourcareer
+
+  frontend:
+    build:
+      context: ../path-to-your-career-frontend/
+      dockerfile: Dockerfile
+    container_name: "path_to_your_career_frontend"
+    ports:
+      - "5173:5173"
+    volumes:
+      - ../path-to-your-career-frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - pathtoyourcareer
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend_api
+    command: >
+      bash -c "
+              python manage.py makemigrations &&
+              python manage.py migrate &&
+              python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./backend/:/usr/src/backend/
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - pathtoyourcareer
+volumes:
+  postgres_data:
+  
